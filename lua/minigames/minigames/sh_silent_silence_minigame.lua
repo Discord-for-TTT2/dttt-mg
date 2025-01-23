@@ -1,3 +1,7 @@
+if SERVER then
+    AddCSLuaFile()
+end
+
 MINIGAME.author = "vertiKarl" -- author
 MINIGAME.contact = "https://github.com/vertiKarl" -- contact to the author
 if CLIENT then
