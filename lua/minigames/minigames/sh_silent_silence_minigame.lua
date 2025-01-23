@@ -2,6 +2,9 @@ if SERVER then
     AddCSLuaFile()
 end
 
+local MUTE_LOGIC = "dttt_enable_internal_mute_logic"
+local MOVE_LOGIC = "dttt_enable_internal_move_logic"
+
 MINIGAME.author = "vertiKarl" -- author
 MINIGAME.contact = "https://github.com/vertiKarl" -- contact to the author
 if CLIENT then
@@ -45,13 +48,23 @@ if SERVER then
     -- @realm shared
     function MINIGAME:OnActivation()
         -- TODO: add Hook to disable logic
-        muteLogic = pcall(GetConVar("dttt_enable_internal_mute_logic"):GetBool())
-        moveLogic = pcall(GetConVar("dttt_enable_internal_move_logic"):GetBool())
+        if ConVarExists(MUTE_LOGIC) then
+            muteLogic = GetConVar(MUTE_LOGIC):GetBool()
+        else
+            muteLogic = false
+        end
+
+        if ConVarExists(MOVE_LOGIC) then
+            moveLogic = GetConVar(MOVE_LOGIC):GetBool()
+        else
+            moveLogic = false
+        end
+
         if muteLogic then
-            RunConsoleCommand("dttt_enable_internal_mute_logic 0")
+            RunConsoleCommand(MUTE_LOGIC, "0")
         end
         if moveLogic then
-            RunConsoleCommand("dttt_enable_internal_move_logic 0")
+            RunConsoleCommand(MOVE_LOGIC, "0")
         end
         print("[DTTT-Silence] Muting all players")
 
@@ -88,10 +101,10 @@ if SERVER then
         -- TODO: add Hook to reenable logic, is that even needed?
         hook.Run("DTTTUnmuteAllPlayers")
         if muteLogic then
-            RunConsoleCommand("dttt_enable_internal_mute_logic 1")
+            RunConsoleCommand(MUTE_LOGIC, "1")
         end
         if moveLogic then
-            RunConsoleCommand("dttt_enable_internal_move_logic 1")
+            RunConsoleCommand(MOVE_LOGIC, "1")
         end
         print("[DTTT-Silence] Muting all players")
 
