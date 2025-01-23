@@ -10,12 +10,12 @@ MINIGAME.contact = "https://github.com/vertiKarl" -- contact to the author
 if CLIENT then
     MINIGAME.lang = {
         name = {
-            de = "Schweigsame Stille",
-            en = "Silent Silence"
+            de = "Reich der Toten",
+            en = "Realm of the dead"
         },
         desc = {
-            de = "Versuche ohne verbale Kommunikation zu gewinnen!",
-            en = "Try to win without verbal communication!"
+            de = "Tote können reden! (und das als einzige)",
+            en = "Dead players can talk! (and they are the only ones that can)"
         }
     }
 
@@ -29,6 +29,7 @@ if CLIENT then
 
         -- disable voice chat ui
         hook.Add("TTT2CanUseVoiceChat", "DTTTSilenceMG", function(ply, isTeam)
+            if not ply:Alive() then return end
             return false
         end)
     end
@@ -66,28 +67,44 @@ if SERVER then
         if moveLogic then
             RunConsoleCommand(MOVE_LOGIC, "0")
         end
-        print("[DTTT-Silence] Muting all players")
+        print("[DTTT-ReverseSilence] Muting all players")
 
         -- Mute in Discord
         hook.Run("DTTTMuteAllPlayers")
 
         -- Disable radio commands server side
-        hook.Add("TTTPlayerRadioCommand", "DTTTSilenceMG", function()
+        hook.Add("TTTPlayerRadioCommand", "DTTTReverseSilenceMG", function(ply)
+            if not ply:Alive() then return end
             return true
         end)
 
         -- Disable ingame voice chat
-        hook.Add("TTT2CanUseVoiceChat", "DTTTSilenceMG", function(ply, isTeam)
+        hook.Add("TTT2CanUseVoiceChat", "DTTTReverseSilenceMG", function(ply, isTeam)
+            if not ply:Alive() then return end
             return false
         end)
 
         -- Disable text chat
-        hook.Add("TTT2AvoidGeneralChat", "DTTTSilenceMG", function(ply, text)
+        hook.Add("TTT2AvoidGeneralChat", "DTTTReverseSilenceMG", function(ply, text)
             if not IsValid(ply) then return end
 
             LANG.Msg(ply, "dttt_minigame_chat_jammed", nil, MSG_CHAT_WARN)
 
             return false
+        end)
+
+
+        hook.Add("TTT2PostPlayerDeath", "DTTTReverseSilenceMG", function(ply)
+            if not IsValid(ply) then return end
+
+            hook.Run("DTTTUnmutePlayer", ply)
+        end)
+
+
+        hook.Add("PlayerSpawn", "DTTTReverseSilenceMG", function(ply)
+            if not IsValid(ply) or not MINIGAME:isActive() then return end
+
+            hook.Run("DTTTMutePlayer", ply)
         end)
 
     end
@@ -97,7 +114,7 @@ if SERVER then
     -- @hook
     -- @realm shared
     function MINIGAME:OnDeactivation()
-        print("[DTTT-Silence] Muting all players")
+        print("[DTTT-ReverseSilence] Muting all players")
         -- TODO: add Hook to reenable logic, is that even needed?
         hook.Run("DTTTUnmuteAllPlayers")
         if muteLogic then
@@ -106,10 +123,10 @@ if SERVER then
         if moveLogic then
             RunConsoleCommand(MOVE_LOGIC, "1")
         end
-        print("[DTTT-Silence] Muting all players")
+        print("[DTTT-ReverseSilence] Muting all players")
 
-        hook.Remove("TTTPlayerRadioCommand", "DTTTSilenceMG")
-        hook.Remove("TTT2CanUseVoiceChat", "DTTTSilenceMG")
-        hook.Remove("TTT2AvoidGeneralChat", "DTTTSilenceMG")
+        hook.Remove("TTTPlayerRadioCommand", "DTTTReverseSilenceMG")
+        hook.Remove("TTT2CanUseVoiceChat", "DTTTReverseSilenceMG")
+        hook.Remove("TTT2AvoidGeneralChat", "DTTTReverseSilenceMG")
     end
 end
