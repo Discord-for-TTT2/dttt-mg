@@ -45,8 +45,8 @@ if SERVER then
     -- @realm shared
     function MINIGAME:OnActivation()
         -- TODO: add Hook to disable logic
-        muteLogic = GetConVar("dttt_enable_internal_mute_logic"):GetBool()
-        moveLogic = GetConVar("dttt_enable_internal_move_logic"):GetBool()
+        muteLogic = pcall(GetConVar("dttt_enable_internal_mute_logic"):GetBool())
+        moveLogic = pcall(GetConVar("dttt_enable_internal_move_logic"):GetBool())
         if muteLogic then
             RunConsoleCommand("dttt_enable_internal_mute_logic 0")
         end
