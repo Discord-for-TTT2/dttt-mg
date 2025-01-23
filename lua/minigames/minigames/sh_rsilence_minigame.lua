@@ -102,8 +102,6 @@ if SERVER then
 
 
         hook.Add("PlayerSpawn", "DTTTReverseSilenceMG", function(ply)
-            if not IsValid(ply) or not MINIGAME:isActive() then return end
-
             hook.Run("DTTTMutePlayer", ply)
         end)
 

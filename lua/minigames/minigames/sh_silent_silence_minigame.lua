@@ -90,6 +90,8 @@ if SERVER then
             return false
         end)
 
+        -- TODO: disable team chat
+
     end
 
     ---
