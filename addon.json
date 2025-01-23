@@ -1,0 +1,13 @@
+{
+    "title": "Discord Minigames",
+    "description": "",
+    "type": "servercontent",
+    "tags": [
+        "fun"
+    ],
+    "ignore": [
+        ".git/*",
+        ".vscode/*",
+        "README.md"
+    ]
+}
