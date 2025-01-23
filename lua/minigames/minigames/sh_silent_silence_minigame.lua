@@ -45,13 +45,13 @@ if SERVER then
     -- @realm shared
     function MINIGAME:OnActivation()
         -- TODO: add Hook to disable logic
-        muteLogic = GetConVar:GetBool("dttt_enable_mute_logic")
-        moveLogic = GetConVar:GetBool("dttt_enable_move_logic")
+        muteLogic = GetConVar("dttt_enable_internal_mute_logic"):GetBool()
+        moveLogic = GetConVar("dttt_enable_internal_move_logic"):GetBool()
         if muteLogic then
-            RunConsoleCommand("dttt_enable_mute_logic 0")
+            RunConsoleCommand("dttt_enable_internal_mute_logic 0")
         end
         if moveLogic then
-            RunConsoleCommand("dttt_enable_move_logic 0")
+            RunConsoleCommand("dttt_enable_internal_move_logic 0")
         end
         print("[DTTT-Silence] Muting all players")
 
@@ -88,10 +88,10 @@ if SERVER then
         -- TODO: add Hook to reenable logic, is that even needed?
         hook.Run("DTTTUnmuteAllPlayers")
         if muteLogic then
-            RunConsoleCommand("dttt_enable_mute_logic 1")
+            RunConsoleCommand("dttt_enable_internal_mute_logic 1")
         end
         if moveLogic then
-            RunConsoleCommand("dttt_enable_move_logic 1")
+            RunConsoleCommand("dttt_enable_internal_move_logic 1")
         end
         print("[DTTT-Silence] Muting all players")
 
