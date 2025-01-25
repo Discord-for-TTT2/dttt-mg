@@ -40,32 +40,16 @@ if CLIENT then
 end
 
 if SERVER then
-    local muteLogic
-    local moveLogic
     ---
     -- Called if the @{MINIGAME} activates
     -- @hook
     -- @realm shared
     function MINIGAME:OnActivation()
-        -- TODO: add Hook to disable logic
-        if ConVarExists(MUTE_LOGIC) then
-            muteLogic = GetConVar(MUTE_LOGIC):GetBool()
-        else
-            muteLogic = false
-        end
+        -- Disable DTTT mute logic
+        hook.Add("DTTTPreMuteLogic", "DTTTSilenceMG", function()
+            return true
+        end)
 
-        if ConVarExists(MOVE_LOGIC) then
-            moveLogic = GetConVar(MOVE_LOGIC):GetBool()
-        else
-            moveLogic = false
-        end
-
-        if muteLogic then
-            RunConsoleCommand(MUTE_LOGIC, "0")
-        end
-        if moveLogic then
-            RunConsoleCommand(MOVE_LOGIC, "0")
-        end
         print("[DTTT-Silence] Muting all players")
 
         -- Mute in Discord
@@ -90,7 +74,14 @@ if SERVER then
             return false
         end)
 
-        -- TODO: disable team chat
+        -- Disable team chat
+        hook.Add("TTT2AvoidTeamChat", "DTTSilenceMG", function(sender, team, msg)
+            if not IsValid(sender) or team == TEAM_SPECTATOR then return end
+
+            LANG.Msg(sender, "dttt_minigame_chat_jammed", nil, MSG_CHAT_WARN)
+
+            return false
+        end)
 
     end
 
@@ -99,19 +90,13 @@ if SERVER then
     -- @hook
     -- @realm shared
     function MINIGAME:OnDeactivation()
-        print("[DTTT-Silence] Muting all players")
-        -- TODO: add Hook to reenable logic, is that even needed?
+        print("[DTTT-Silence] Unmuting all players")
         hook.Run("DTTTUnmuteAllPlayers")
-        if muteLogic then
-            RunConsoleCommand(MUTE_LOGIC, "1")
-        end
-        if moveLogic then
-            RunConsoleCommand(MOVE_LOGIC, "1")
-        end
-        print("[DTTT-Silence] Muting all players")
 
         hook.Remove("TTTPlayerRadioCommand", "DTTTSilenceMG")
         hook.Remove("TTT2CanUseVoiceChat", "DTTTSilenceMG")
         hook.Remove("TTT2AvoidGeneralChat", "DTTTSilenceMG")
+        hook.Remove("TTT2AvoidTeamChat", "DTTSilenceMG")
+        hook.Remove("DTTTPreMuteLogic", "DTTTSilenceMG")
     end
 end

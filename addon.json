@@ -8,6 +8,10 @@
     "ignore": [
         ".git/*",
         ".vscode/*",
+	    ".gitignore",
+	    "license",
+	    ".prettierignore",
+        "addon.gma",
         "README.md"
     ]
 }
