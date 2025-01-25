@@ -87,12 +87,12 @@ if SERVER then
         hook.Add("TTT2PostPlayerDeath", "DTTTReverseSilenceMG", function(ply)
             if not IsValid(ply) then return end
 
-            hook.Run("DTTTUnmutePlayer", ply)
+            hook.Run("DTTTUnmute", ply)
         end)
 
 
         hook.Add("PlayerSpawn", "DTTTReverseSilenceMG", function(ply)
-            hook.Run("DTTTMutePlayer", ply)
+            hook.Run("DTTTMute", ply)
         end)
 
     end
