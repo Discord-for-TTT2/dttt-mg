@@ -2,9 +2,6 @@ if SERVER then
     AddCSLuaFile()
 end
 
-local MUTE_LOGIC = "dttt_enable_internal_mute_logic"
-local MOVE_LOGIC = "dttt_enable_internal_move_logic"
-
 MINIGAME.author = "vertiKarl" -- author
 MINIGAME.contact = "https://github.com/vertiKarl" -- contact to the author
 if CLIENT then
@@ -53,7 +50,7 @@ if SERVER then
         print("[DTTT-Silence] Muting all players")
 
         -- Mute in Discord
-        hook.Run("DTTTMuteAllPlayers")
+        hook.Run("DTTTMuteAll")
 
         -- Disable radio commands server side
         hook.Add("TTTPlayerRadioCommand", "DTTTSilenceMG", function()
@@ -91,7 +88,7 @@ if SERVER then
     -- @realm shared
     function MINIGAME:OnDeactivation()
         print("[DTTT-Silence] Unmuting all players")
-        hook.Run("DTTTUnmuteAllPlayers")
+        hook.Run("DTTTUnmuteAll")
 
         hook.Remove("TTTPlayerRadioCommand", "DTTTSilenceMG")
         hook.Remove("TTT2CanUseVoiceChat", "DTTTSilenceMG")
