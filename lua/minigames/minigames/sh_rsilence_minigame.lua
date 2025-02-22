@@ -51,7 +51,7 @@ if SERVER then
         print("[DTTT-ReverseSilence] Muting all players")
 
         -- Mute in Discord
-        hook.Run("DTTTMuteAll")
+        hook.Run("DTTTMuteAll", 0) -- duration: 0
 
         -- Disable radio commands server side
         hook.Add("TTTPlayerRadioCommand", "DTTTReverseSilenceMG", function(ply)
@@ -87,12 +87,12 @@ if SERVER then
         hook.Add("TTT2PostPlayerDeath", "DTTTReverseSilenceMG", function(ply)
             if not IsValid(ply) then return end
 
-            hook.Run("DTTTUnmute", ply)
+            hook.Run("DTTTUnmute", ply, 0) -- duration: forever
         end)
 
 
         hook.Add("PlayerSpawn", "DTTTReverseSilenceMG", function(ply)
-            hook.Run("DTTTMute", ply)
+            hook.Run("DTTTMute", ply, 0) -- duration: forever
         end)
 
     end
@@ -103,7 +103,7 @@ if SERVER then
     -- @realm shared
     function MINIGAME:OnDeactivation()
         print("[DTTT-ReverseSilence] Unmuting all players")
-        hook.Run("DTTTUnmuteAll")
+        hook.Run("DTTTUnmuteAll", 0) -- duration: forever
 
         hook.Remove("TTTPlayerRadioCommand", "DTTTReverseSilenceMG")
         hook.Remove("TTT2CanUseVoiceChat", "DTTTReverseSilenceMG")
